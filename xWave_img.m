@@ -4,9 +4,9 @@ ultrasound_probe = 'L22-14v_lambda/2'; % options: L22-14v RCA_Imasonic P6-3 L22-
 
 % simulation settings
 gpu_run = false;
-cpu_run_cluster = true;
+cpu_run_cluster = false;
 record_movie = false;
-maroilles_gpu_run = false;
+maroilles_gpu_run = true;
  
 if gpu_run
     addpath("/tudelft.net/staff-bulk/tnw/IST/AK/hpc/akuliesh1/Matlab_Toolboxes");
@@ -24,7 +24,7 @@ else
 end
 
 CFL = 0.3;
-grid_size = 20e-6; % [m]
+grid_size = 10e-6; % [m]
 
 speed_of_sound = 1480; % [m/s] reference SoS
 rho = 1000; % [kg/m^3] reference density
