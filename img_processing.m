@@ -13,10 +13,10 @@ switch resolution
         file_cb = 'RESULTS/xWave_inv_ratio_lambda_pitch.mat'; % cb = comp beam
         
     case 0.5
-        load('RESULTS/xWave_targ_38um.mat')
+        load('RESULTS/xWave.mat')
         line_start = 1;
         line_finish = 34;
-        file_mb = 'RESULTS/xWave_targ_38um.mat'; % mb = main beam
+        file_mb = 'RESULTS/xWave.mat'; % mb = main beam
         file_cb = 'RESULTS/xWave_inv_ratio_targ_38um.mat'; % cb = comp beam
         
     case 0.25
@@ -61,7 +61,7 @@ colormap gray
 
 %%
 floorn = @(x,n) floor(x.*10^n)/10^n;
-pos_z = find(floorn(z_vec, 4) == 5e-3, 1);
+pos_z = find(floorn(z_vec, 4) == 6e-3, 1);
 
 figure()
 imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z,line_start:line_finish)); 

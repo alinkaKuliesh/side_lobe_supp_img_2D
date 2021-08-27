@@ -3,30 +3,21 @@
 % =========================================================================
 
 function source = define_source_both_inv(margin, kgrid, transducer, pulse, speed_of_sound, indent)
-    apodization_Z = true;
     apodization_Y = true;
 
 % DEFINE THE MASK    
     x_offset = margin;
-    transducer.size_y = transducer.element_width * transducer.num_elements ...
-         + transducer.kerf * (transducer.num_elements - 1);
-    transducer.size_y_active = transducer.element_width * transducer.num_active_elements ...
-         + transducer.kerf * (transducer.num_active_elements - 1);
-    
-    source.u_mask = zeros(kgrid.Nx, kgrid.Ny, kgrid.Nz);
+  
+    source.u_mask = zeros(kgrid.Nx, kgrid.Ny);
     start_index_y = kgrid.Ny/2 - round(transducer.size_y/2) + 1 +...
         indent * (transducer.element_width + transducer.kerf);
-    start_index_z = kgrid.Nz/2 - round(transducer.element_length/2) + 1;
     
     if transducer.kerf ~= 0
         pattern = [ones(transducer.element_width, 1); zeros(transducer.kerf, 1)]';
         pattern_y = [repmat(pattern, 1, transducer.num_active_elements - 1) ones(1, transducer.element_width)];
-        pattern_yz = repmat(pattern_y, transducer.element_length, 1);
-        source.u_mask(x_offset, start_index_y:start_index_y+transducer.size_y_active-1,...
-            start_index_z:start_index_z+transducer.element_length-1) = pattern_yz';
+        source.u_mask(x_offset, start_index_y:start_index_y+transducer.size_y_active-1) = pattern_y;
     else
-        source.u_mask(x_offset, start_index_y:start_index_y+transducer.size_y_active - 1,...
-            start_index_z:start_index_z+transducer.element_length-1) = 1;    
+        source.u_mask(x_offset, start_index_y:start_index_y+transducer.size_y_active - 1) = 1;    
     end
    
 % DEFINE THE SIGNAL
@@ -90,19 +81,8 @@ function source = define_source_both_inv(margin, kgrid, transducer, pulse, speed
     %repeat elements along y direction
     temporaryp = repelem(temporaryp, transducer.element_width, 1);
     
-    winZ = getWin(transducer.element_length, 'Tukey', 'Param', 0.5, 'Plot', false).'; % 0 Rectangular window; 1 Hann window
-    
-    %repeat along z direction
-    num_voxels = transducer.num_active_elements * transducer.element_width; % number of voxels in transducer in longitudial direction
-    
-    for i = 1 : transducer.element_length
-        if apodization_Z
-            source.ux(num_voxels*(i-1)+1:num_voxels*(i-1)+num_voxels,:) = temporaryp * winZ(i) / 1480 / 1000; % v = p / c / rho; 
-        else
-            source.ux(num_voxels*(i-1)+1:num_voxels*(i-1)+num_voxels,:) = temporaryp / 1480 / 1000; 
-        end
-    end
-    
+    source.ux = temporaryp / 1480 / 1000; 
+
 %     voxelPlot(source.u_mask)
     
 end
