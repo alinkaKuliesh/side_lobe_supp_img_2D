@@ -24,7 +24,7 @@ else
 end
 
 CFL = 0.3;
-grid_size = 10e-6; % [m]
+grid_size = 1.6e-6; % [m]
 
 speed_of_sound = 1480; % [m/s] reference SoS
 rho = 1000; % [kg/m^3] reference density
