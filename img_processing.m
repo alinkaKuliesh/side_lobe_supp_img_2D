@@ -64,8 +64,8 @@ floorn = @(x,n) floor(x.*10^n)/10^n;
 pos_z = find(floorn(z_vec, 4) == 6e-3, 1);
 
 figure()
-% imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z,line_start:line_finish)); 
-imagesc(I(1:pos_z,line_start:line_finish)); 
+imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z,line_start:line_finish)); 
+% imagesc(I(1:pos_z,line_start:line_finish)); 
 axis image
 xlabel('x [mm]')
 ylabel('z [mm]')
