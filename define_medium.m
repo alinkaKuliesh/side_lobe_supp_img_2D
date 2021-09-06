@@ -11,7 +11,7 @@ function medium = define_medium(kgrid, transducer, pulse, scatters, margin, spec
     alpha_power_water = 2;  % frequency dependance y
     
     
-    speckle_perc = 0.005; % 0.5% variation
+    speckle_perc = 0.05; % 5% variation
     speckle_mask = (rand(kgrid.Nx, kgrid.Ny) - 0.5) * speckle_perc * 2 + 1;
     
     
@@ -64,7 +64,7 @@ switch shape
 
         for i = 1 : length(x_mask)
             maps.sound_speed(x_mask(i), y_mask(i), z_mask(k)) = 2 * c_water;
-            maps.density(x_mask(i), y_mask(i), z_mask(k)) = 15 * rho_water;
+            maps.density(x_mask(i), y_mask(i), z_mask(k)) = 2 * rho_water;
         end
         
     case 'ball'
@@ -76,7 +76,8 @@ switch shape
         end    
         
         maps.sound_speed(ball >= 1) = 2 * c_water;
-        maps.density(ball >= 1) = 15 * rho_water;
+        maps.density(ball >= 1) = 2 * rho_water;
+        
     case 'none'
         for i = 1 : length(x_mask)
             maps.sound_speed(x_mask(i), y_mask(i)) = 2 * c_water;

@@ -17,7 +17,7 @@ switch resolution
         line_start = 1;
         line_finish = 34;
         file_mb = 'RESULTS/xWave.mat'; % mb = main beam
-        file_cb = 'RESULTS/xWave_inv.mat'; % cb = comp beam
+        file_cb = 'RESULTS/xWave_inv_NC2.mat'; % cb = comp beam
         
     case 0.25
 %         load('RESULTS/xWave_lambda_pitch.mat')
@@ -33,18 +33,27 @@ end
 
 % reconstruction of the image from single beam
 [IQbf, z_vec, x_vec] = RF2img(file_mb, 'verasonics', line_start, line_finish, resolution);
+x_vec = x_vec(line_start:line_finish);
 
 % reconstruction of the image from double beam
 [IQbf_inv, ~, ~] = RF2img(file_cb, 'verasonics', line_start, line_finish, resolution);
 
 %% image
+interpolate = 1; % interpolate in longitudinal direction
 DR = 40;
 Env = abs(IQbf); % real envelope
-I = 20*log10(Env/max(Env,[],'all'));
+if interpolate 
+    Env = interp2(x_vec, z_vec', Env, interpn(x_vec), z_vec');
+end
+I = 20*log10(Env/max(Env, [], 'all'));
 I(I < -DR) = -DR;
 
 Env_inv = abs(IQbf_inv); % real envelope
-I_inv = 20*log10(Env_inv/max(Env_inv,[],'all'));
+if interpolate
+    Env_inv = interp2(x_vec, z_vec', Env_inv, interpn(x_vec), z_vec');
+    x_vec = interpn(x_vec);
+end
+I_inv = 20*log10(Env_inv/max(Env_inv, [], 'all'));
 I_inv(I_inv < -DR) = -DR;
 
 figure()
@@ -64,53 +73,54 @@ floorn = @(x,n) floor(x.*10^n)/10^n;
 pos_z = find(floorn(z_vec, 4) == 6e-3, 1);
 
 figure()
-imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z,line_start:line_finish)); 
-% imagesc(I(1:pos_z,line_start:line_finish)); 
+% imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, :)); 
+imagesc(I(1:pos_z, :)); 
 axis image
 xlabel('x [mm]')
 ylabel('z [mm]')
 colorbar
 colormap gray
-title('Main beam, f = 15 MHz')
+title(['Main beam, f = 15 MHz, NC = ', num2str(pulse.num_cycles)])
 
 figure()
-imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I_inv(1:pos_z,line_start:line_finish)); 
-% imagesc(I_inv(1:pos_z,line_start:line_finish)); 
+% imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I_inv(1:pos_z, :)); 
+imagesc(I_inv(1:pos_z, :)); 
 axis image
 xlabel('x [mm]')
 ylabel('z [mm]')
 colorbar
 colormap gray
-title('Complementary beam, f = 7.5 MHz')
+title(['Complementary beam, f = 7.5 MHz, NC = ', num2str(pulse.num_cycles)])
 
 %% overlay points on the image
-[xv, yv] = resolution_grid(2*transducer.pitch*dx);
-xv = 2e-3 + xv;
-yv = x_vec(ceil(end/2)) + yv;
+load('res_grid.mat')
+
+xv = res_grid.xv - res_grid.margin * dx;
+yv = res_grid.yv - (((transducer.num_active_elements - 1) / 2) * transducer.pitch + transducer.pitch / 2) * dx;
 
 figure()
-imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, line_start:line_finish)); hold on
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, :)); hold on
 for i = 1 : length(xv)
     scatter(yv(i)*1e3, xv(i)*1e3, 'r', 'fill'); hold on
 end
 axis image
 colorbar
 colormap gray
-title('Main beam, f = 15 MHz')
+title(['Main beam, f = 15 MHz, NC = ', num2str(pulse.num_cycles)])
 
 
 figure()
-imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I_inv(1:pos_z, line_start:line_finish)); hold on
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I_inv(1:pos_z, :)); hold on
 for i = 1 : length(xv)
     scatter(yv(i)*1e3, xv(i)*1e3, 'r', 'fill'); hold on
 end
 axis image
 colorbar
 colormap gray
-title('Complementary beam, f = 7.5 MHz')
+title(['Complementary beam, f = 7.5 MHz, NC = ', num2str(pulse.num_cycles)])
 
 %% subtraction of IQ data (main IQ - complementary IQ) 
-normalization = 1; % 0 = without normalisation of envelope data 1 = with
+normalization = 0; % 0 = without normalisation of envelope data 1 = with
 
 if normalization
     Env = Env ./ max(Env, [], 'all');
@@ -129,52 +139,57 @@ I_diff = 20*log10(Env_diff/max(Env_diff,[],'all'));
 I_diff(I_diff < -DR) = -DR;
 
 figure()
-imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I_diff(1:pos_z, line_start:line_finish)); hold on
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I_diff(1:pos_z, :)); hold on
 axis image
-title('IQbf\_main - IQbf\_comp (f = 7.5 MHz, NC = 2)')
+if normalization
+    title(['norm(E\_main) - 0.3*norm(E\_comp) (f = 7.5 MHz, NC = ', num2str(pulse.num_cycles), ')'])
+else
+    title(['E\_main - E\_comp (f = 7.5 MHz, NC = ', num2str(pulse.num_cycles),')'])
+end
 colorbar
 colormap gray
 
 figure()
-imagesc(x_vec(line_start:line_finish)*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, line_start:line_finish)); hold on
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, :)); hold on
 axis image
 title('IQbf\_main')
 colorbar
 colormap gray
 
 %% cross-section line of the PSF
-% [~, pos_z] = min(abs(z_vec-xv(1)-0.025e-3));
-pos_z = 450;
+[~, pos_z] = min(abs(z_vec-xv(end)-0.0128e-3));
+% pos_z = 304;
 
-% in dB
+% envelope [dB]
 figure()
-plot(x_vec(line_start:line_finish)*1e3, I(pos_z, line_start:line_finish), 'DisplayName', 'Main beam'); hold on
-plot(x_vec(line_start:line_finish)*1e3, I_inv(pos_z, line_start:line_finish), 'DisplayName', 'Complementary beam, f = 7.5 MHz'); 
+plot(x_vec*1e3, I(pos_z, :), 'DisplayName', 'E\_main'); hold on
+plot(x_vec*1e3, I_inv(pos_z, :), 'DisplayName', 'E\_comp'); 
 xlabel('longitudinal direction [mm]')
 ylabel('Envelope [dB]')
 title (strcat('PSF at z =  ', num2str(z_vec(pos_z)*1e3), ' mm'))
 legend
 
 figure()
-plot(x_vec(line_start:line_finish)*1e3, I(pos_z, line_start:line_finish), 'DisplayName', 'Main beam'); hold on
-plot(x_vec(line_start:line_finish)*1e3, I_diff(pos_z, line_start:line_finish), 'DisplayName', 'Main  - Complementary, f = 7.5 MHz'); 
+plot(x_vec*1e3, I(pos_z,:), 'DisplayName', 'E\_main'); hold on
+% plot(x_vec*1e3, I_diff(pos_z, :), 'DisplayName', 'norm(E\_main) - 0.3*norm(E\_comp)'); 
+plot(x_vec*1e3, I_diff(pos_z, :), 'DisplayName', 'E\_main - E\_comp(NC = 2)'); 
 xlabel('longitudinal direction [mm]')
 ylabel('Envelope difference [dB]')
 title (strcat('PSF at z =  ', num2str(z_vec(pos_z)*1e3), ' mm'))
 legend
 
-% in envelope
+% envelope [~]
 figure()
-plot(x_vec(line_start:line_finish)*1e3, Env(pos_z, line_start:line_finish), 'DisplayName', 'Main beam'); hold on
-plot(x_vec(line_start:line_finish)*1e3, Env_inv(pos_z, line_start:line_finish), 'DisplayName', 'Complementary beam, f = 7.5 MHz'); 
+plot(x_vec*1e3, Env(pos_z, :), 'DisplayName', 'E\_main'); hold on
+plot(x_vec*1e3, Env_inv(pos_z, :), 'DisplayName', 'E\_comp'); 
 xlabel('longitudinal direction [mm]')
 ylabel('Envelope [~]')
 title (strcat('PSF at z =  ', num2str(z_vec(pos_z)*1e3), ' mm'))
 legend
 
 figure()
-plot(x_vec(line_start:line_finish)*1e3, Env(pos_z, line_start:line_finish), 'DisplayName', 'Main beam'); hold on
-plot(x_vec(line_start:line_finish)*1e3, Env_diff(pos_z, line_start:line_finish), 'DisplayName', 'Complementary beam, f = 7.5 MHz'); 
+plot(x_vec*1e3, Env(pos_z, :), 'DisplayName', 'E\_main'); hold on
+plot(x_vec*1e3, Env_diff(pos_z, :), 'DisplayName', 'E\_comp'); 
 xlabel('longitudinal direction [mm]')
 ylabel('Envelope [~]')
 title (strcat('PSF at z =  ', num2str(z_vec(pos_z)*1e3), ' mm'))
