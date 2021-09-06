@@ -61,7 +61,7 @@ sensor = define_sensor(margin, kgrid, transducer, 0, 'all');
 %for indent = 0 : (transducer.num_elements - transducer.num_active_elements)
 % indent = 0 corresponds to line/element 33; indent = 32 <-> 65 
 % indent = 128 <-> central line 129
-for indent = 0 : 33
+for indent = 0 : 10
     
 % create the time array long enough for tilted PW propagation
     t_end = (((kgrid.Nx - margin) + ...
