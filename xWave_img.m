@@ -51,6 +51,10 @@ image_depth = ceil(6e-3 / grid_size); % [voxels]
 % define the sensor
 sensor = define_sensor(margin, kgrid, transducer, 0, 'all');
 
+% define the medium | in loop so speckle randomly generated every time |
+% patterns: single points OR resolution grid
+    speckle_flag = true;
+    medium = define_medium(kgrid, transducer, pulse, 'resolution grid', margin, speckle_flag);
 
 
 % indent = indentation from left edge in transducer elements
@@ -58,10 +62,6 @@ sensor = define_sensor(margin, kgrid, transducer, 0, 'all');
 % indent = 0 corresponds to line/element 33; indent = 32 <-> 65 
 % indent = 128 <-> central line 129
 for indent = 0 : 33
-% define the medium | in loop so speckle randomly generated every time |
-% patterns: single points OR resolution grid
-    speckle_flag = false;
-    medium = define_medium(kgrid, transducer, pulse, 'resolution grid', margin, speckle_flag);
     
 % create the time array long enough for tilted PW propagation
     t_end = (((kgrid.Nx - margin) + ...
