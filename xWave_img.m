@@ -3,10 +3,10 @@ clear all
 ultrasound_probe = 'L22-14v_lambda/2'; % options: L22-14v RCA_Imasonic P6-3 L22-14v_lambda/4
 
 % simulation settings
-gpu_run = false;
+gpu_run = true;
 cpu_run_cluster = false;
 record_movie = false;
-maroilles_gpu_run = true;
+maroilles_gpu_run = false;
  
 if gpu_run
     addpath("/tudelft.net/staff-bulk/tnw/IST/AK/hpc/akuliesh1/Matlab_Toolboxes");
