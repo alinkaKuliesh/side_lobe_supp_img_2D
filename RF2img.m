@@ -20,7 +20,7 @@ function [SIGbf, zvector, xvector] = RF2img (file_path, sampling_freq, line_star
             
         case 0.5
             
-            for i = 1 : 34
+            for i = 1 : size(RF_matrix, 3)
                 SIG(:, :, i) = RF_matrix(:, i:i+128, i);
             end
             

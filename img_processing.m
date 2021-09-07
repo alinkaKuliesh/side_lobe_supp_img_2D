@@ -15,8 +15,8 @@ switch resolution
     case 0.5
         load('RESULTS/xWave.mat')
         line_start = 1;
-        line_finish = 34;
-        file_mb = 'RESULTS/xWave.mat'; % mb = main beam
+        line_finish = 11;
+        file_mb = 'RESULTS/xWave-speckle.mat'; % mb = main beam
         file_cb = 'RESULTS/xWave_inv_NC2.mat'; % cb = comp beam
         
     case 0.25
@@ -36,7 +36,7 @@ end
 x_vec = x_vec(line_start:line_finish);
 
 % reconstruction of the image from double beam
-[IQbf_inv, ~, ~] = RF2img(file_cb, 'verasonics', line_start, line_finish, resolution);
+% [IQbf_inv, ~, ~] = RF2img(file_cb, 'verasonics', line_start, line_finish, resolution);
 
 %% image
 interpolate = 1; % interpolate in longitudinal direction
@@ -73,8 +73,8 @@ floorn = @(x,n) floor(x.*10^n)/10^n;
 pos_z = find(floorn(z_vec, 4) == 6e-3, 1);
 
 figure()
-% imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, :)); 
-imagesc(I(1:pos_z, :)); 
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, :)); 
+% imagesc(I(1:pos_z, :)); 
 axis image
 xlabel('x [mm]')
 ylabel('z [mm]')
