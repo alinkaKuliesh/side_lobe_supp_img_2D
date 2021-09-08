@@ -93,4 +93,4 @@ end
 dt = kgrid.dt;
 dx = kgrid.dx;
 
-save('xWave.mat', 'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
+save('xWave_disc.mat', 'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
