@@ -11,7 +11,7 @@ function medium = define_medium(kgrid, transducer, pulse, scatters, margin, spec
     alpha_power_water = 2;  % frequency dependance y
     
     
-    speckle_perc = 0.01; % 1% variation
+    speckle_perc = 0.05; % 5% variation
     speckle_mask = (rand(kgrid.Nx, kgrid.Ny) - 0.5) * speckle_perc * 2 + 1;
     
     

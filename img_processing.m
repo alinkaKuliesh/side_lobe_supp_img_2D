@@ -15,8 +15,8 @@ switch resolution
     case 0.5
         load('RESULTS/xWave.mat')
         line_start = 1;
-        line_finish = 34;
-        file_mb = 'RESULTS/xWave.mat'; % mb = main beam
+        line_finish = 11;
+        file_mb = 'RESULTS/xWave_disc.mat'; % mb = main beam
         file_cb = 'RESULTS/xWave_inv_NC2.mat'; % cb = comp beam
         
     case 0.25
@@ -36,7 +36,7 @@ end
 x_vec = x_vec(line_start:line_finish);
 
 % reconstruction of the image from double beam
-[IQbf_inv, ~, ~] = RF2img(file_cb, 'verasonics', line_start, line_finish, resolution);
+% [IQbf_inv, ~, ~] = RF2img(file_cb, 'verasonics', line_start, line_finish, resolution);
 
 %% image
 interpolate = 1; % interpolate in longitudinal direction
@@ -46,7 +46,7 @@ if interpolate
     Env = interp2(x_vec, z_vec', Env, interpn(x_vec), z_vec');
 end
 I = 20*log10(Env/max(Env, [], 'all'));
-% I(I < -DR) = -DR;
+I(I < -DR) = -DR;
 
 Env_inv = abs(IQbf_inv); % real envelope
 if interpolate
