@@ -52,7 +52,7 @@ end
     start_index_y = kgrid.Ny/2 - round(transducer.size_y/2) + 1; 
     y_mask = round(yv/kgrid.dy) + start_index_y; 
 
-shape = 'none';
+shape = 'disc';
 
 switch shape
     case 'cube'
@@ -67,12 +67,12 @@ switch shape
             maps.density(x_mask(i), y_mask(i), z_mask(k)) = 2 * rho_water;
         end
         
-    case 'ball'
+    case 'disc'
         ball = zeros(kgrid.Nx, kgrid.Ny);
         
         for i = 1 : length(x_mask)
             radius = ceil(pulse.wave_length/10/kgrid.dx);
-            ball = ball + makeBall(kgrid.Nx, kgrid.Ny, x_mask(i), y_mask(i), radius, 0);
+            ball = ball + makeDisc(kgrid.Nx, kgrid.Ny, x_mask(i), y_mask(i), radius, 0);
         end    
         
         maps.sound_speed(ball >= 1) = 2 * c_water;

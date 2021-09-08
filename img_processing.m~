@@ -17,7 +17,7 @@ switch resolution
         line_start = 1;
         line_finish = 34;
         file_mb = 'RESULTS/xWave.mat'; % mb = main beam
-        file_cb = 'RESULTS/xWave_inv_NC2.mat'; % cb = comp beam
+        file_cb = 'RESULTS/xWave_inv.mat'; % cb = comp beam
         
     case 0.25
 %         load('RESULTS/xWave_lambda_pitch.mat')
@@ -39,7 +39,7 @@ x_vec = x_vec(line_start:line_finish);
 [IQbf_inv, ~, ~] = RF2img(file_cb, 'verasonics', line_start, line_finish, resolution);
 
 %% image
-interpolate = 1; % interpolate in longitudinal direction
+interpolate = 0; % interpolate in longitudinal direction
 DR = 40;
 Env = abs(IQbf); % real envelope
 if interpolate 
@@ -70,11 +70,10 @@ colormap gray
 
 %%
 floorn = @(x,n) floor(x.*10^n)/10^n;
-pos_z_start = find(floorn(z_vec, 4) == 2.5e-3, 1);
-pos_z_end = find(floorn(z_vec, 4) == 6e-3, 1);
+pos_z = find(floorn(z_vec, 4) == 6e-3, 1);
 
 figure()
-imagesc(x_vec*1e3, z_vec(pos_z_start:pos_z_end)*1e3, I(pos_z_start:pos_z_end, :)); 
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, :)); 
 % imagesc(I(1:pos_z, :)); 
 axis image
 xlabel('x [mm]')
@@ -84,7 +83,7 @@ colormap gray
 title(['Main beam, f = 15 MHz, NC = ', num2str(pulse.num_cycles)])
 
 figure()
-imagesc(x_vec*1e3, z_vec(pos_z_start:pos_z_end)*1e3, I_inv(pos_z_start:pos_z_end, :)); 
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I_inv(1:pos_z, :)); 
 % imagesc(I_inv(1:pos_z, :)); 
 axis image
 xlabel('x [mm]')
@@ -100,7 +99,7 @@ xv = res_grid.xv - res_grid.margin * dx;
 yv = res_grid.yv - (((transducer.num_active_elements - 1) / 2) * transducer.pitch + transducer.pitch / 2) * dx;
 
 figure()
-imagesc(x_vec*1e3, z_vec(pos_z_start:pos_z_end)*1e3, I(pos_z_start:pos_z_end, :)); hold on
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, :)); hold on
 for i = 1 : length(xv)
     scatter(yv(i)*1e3, xv(i)*1e3, 'r', 'fill'); hold on
 end
@@ -111,7 +110,7 @@ title(['Main beam, f = 15 MHz, NC = ', num2str(pulse.num_cycles)])
 
 
 figure()
-imagesc(x_vec*1e3, z_vec(pos_z_start:pos_z_end)*1e3, I_inv(pos_z_start:pos_z_end, :)); hold on
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I_inv(1:pos_z, :)); hold on
 for i = 1 : length(xv)
     scatter(yv(i)*1e3, xv(i)*1e3, 'r', 'fill'); hold on
 end
@@ -121,7 +120,7 @@ colormap gray
 title(['Complementary beam, f = 7.5 MHz, NC = ', num2str(pulse.num_cycles)])
 
 %% subtraction of IQ data (main IQ - complementary IQ) 
-normalization = 1; % 0 = without normalisation of envelope data 1 = with
+normalization = 0; % 0 = without normalisation of envelope data 1 = with
 
 if normalization
     Env = Env ./ max(Env, [], 'all');
@@ -141,7 +140,7 @@ I_diff = 20*log10(Env_diff/max(Env_diff,[],'all'));
 I_diff(I_diff < min(I, [], 'all')) = min(I, [], 'all');
 
 figure()
-imagesc(x_vec*1e3, z_vec(pos_z_start:pos_z_end)*1e3, I_diff(pos_z_start:pos_z_end, :)); hold on
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I_diff(1:pos_z, :)); hold on
 axis image
 if normalization
     title(['norm(E\_main) - 0.3*norm(E\_comp) (f = 7.5 MHz, NC = ', num2str(pulse.num_cycles-2), ')'])
@@ -152,7 +151,7 @@ colorbar
 colormap gray
 
 figure()
-imagesc(x_vec*1e3, z_vec(pos_z_start:pos_z_end)*1e3, I(pos_z_start:pos_z_end, :)); hold on
+imagesc(x_vec*1e3, z_vec(1:pos_z)*1e3, I(1:pos_z, :)); hold on
 axis image
 title('IQbf\_main')
 colorbar
