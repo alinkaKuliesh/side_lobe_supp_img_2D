@@ -55,7 +55,7 @@ sensor = define_sensor(margin, kgrid, transducer, 0, 'all');
 %for indent = 0 : (transducer.num_elements - transducer.num_active_elements)
 % indent = 0 corresponds to line/element 33; indent = 32 <-> 65 
 % indent = 128 <-> central line 129
-for indent = 0 : 10
+for indent = 0 : 33
 % define the medium | in loop so speckle randomly generated every time |
 % patterns: single points OR resolution grid
     speckle_flag = true;

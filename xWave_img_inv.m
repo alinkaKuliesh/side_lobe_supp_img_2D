@@ -3,10 +3,10 @@ clear all
 ultrasound_probe = 'L22-14v_lambda/2'; % options: L22-14v RCA_Imasonic P6-3
 
 % simulation settings
-gpu_run = false;
+gpu_run = true;
 cpu_run_cluster = false;
 record_movie = false;
-maroilles_gpu_run = true;
+maroilles_gpu_run = false;
  
 if gpu_run
     addpath("/tudelft.net/staff-bulk/tnw/IST/AK/hpc/akuliesh1/Matlab_Toolboxes");
@@ -57,7 +57,7 @@ sensor = define_sensor(margin, kgrid, transducer, 0, 'all');
 % indent = 128 <-> central line 129
 for indent = 0 : 33
 % define the medium | in loop so speckle randomly generated every time
-    speckle_flag = false;
+    speckle_flag = true;
     medium = define_medium(kgrid, transducer, pulse, 'resolution grid', margin, speckle_flag);
 
 % create the time array long enough for tilted PW propagation
@@ -92,4 +92,4 @@ end
 dt = kgrid.dt;
 dx = kgrid.dx;
 
-save('xWave_inv.mat', 'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
+save('xWave_inv_disc.mat', 'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
