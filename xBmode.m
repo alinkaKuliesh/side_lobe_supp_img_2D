@@ -1,4 +1,4 @@
-function [] = xBmode(theta)
+function [] = xBmode(theta, save_flag)
 
 ultrasound_probe = 'L22-14v_lambda/2'; % options: L22-14v RCA_Imasonic P6-3 L22-14v_lambda/4
 
