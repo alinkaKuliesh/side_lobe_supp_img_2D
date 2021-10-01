@@ -3,7 +3,6 @@ function [] = xBmode(theta, save_flag)
 theta = str2num(theta);
 save_flag = str2num(save_flag);
 
-
 ultrasound_probe = 'L22-14v_lambda/2'; % options: L22-14v RCA_Imasonic P6-3 L22-14v_lambda/4
 
 % simulation settings
@@ -28,8 +27,8 @@ else
 end
 
 CFL = 0.3;
-% grid_size = 1.6e-6; % [m]
-grid_size = 20e-6; % [m]
+grid_size = 1.6e-6; % [m]
+% grid_size = 20e-6; % [m]
 
 speed_of_sound = 1480; % [m/s] reference SoS
 rho = 1000; % [kg/m^3] reference density
@@ -58,7 +57,7 @@ sensor = define_sensor(margin, kgrid, transducer, 0, 'all');
 %for indent = 0 : (transducer.num_elements - transducer.num_active_elements)
 % indent = 0 corresponds to line/element 33; indent = 32 <-> 65 
 % indent = 128 <-> central line 129
-for indent = 0 : 17
+for indent = 0 : 16
     display(indent)
 % define the medium | in loop so speckle randomly generated every time |
 % patterns: single points OR resolution grid
