@@ -46,7 +46,7 @@ switch ultrasound_probe
         transducer.center_freq = 15e6; % [Hz]
         
     case 'L22-14v_lambda/2'
-        transducer.num_elements = 162;  % number of transducer elements f# = 1.28
+        transducer.num_elements = 145;  % number of transducer elements 
         transducer.num_active_elements = 2 * 64 + 1; % number of firing transducer elements 
         kerf = 0; % [m]
         if kerf < grid_size
@@ -57,7 +57,7 @@ switch ultrasound_probe
         transducer.element_width = ceil(50e-6 / grid_size); % [voxels]
         transducer.pitch = transducer.kerf + transducer.element_width; % [voxels]
         transducer.bandwidth = 0.6; % fractional bandwidth 1 = 100 %
-        transducer.center_freq = 15e6; % [Hz]        
+        transducer.center_freq = 15.625e6; % [Hz]        
         
     case 'RCA_Imasonic'
         transducer.num_elements_full = 128;  % real number of transducer elements (rows/columns)

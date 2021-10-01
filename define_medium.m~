@@ -28,15 +28,13 @@ function medium = define_medium(kgrid, transducer, pulse, scatters, margin, spec
 
 switch scatters
     case 'single points'
-        xv = [1:10:100] * pulse.wave_length + margin * kgrid.dx ; % [m]
+        xv = [1:10] * pulse.wave_length + margin * kgrid.dx ; % [m]
         if mod (transducer.pitch, 2) == 0
-             yv = (((transducer.num_active_elements - 1) / 2 + 8) * transducer.pitch ...
-                 + transducer.pitch / 2) * kgrid.dy;     % [m]  
+            yv = (kgrid.Ny / 2 + transducer.pitch / 2)  * kgrid.dy;
         else
-            yv = (((transducer.num_active_elements - 1) / 2 + 8) * transducer.pitch...
-                + (transducer.pitch - 1) / 2) * kgrid.dy;  
+            yv = (kgrid.Ny / 2 + (transducer.pitch - 1) / 2) * kgrid.dy;
         end   
-        
+        yv = [yv yv+125e-6];
     case 'resolution grid'
        % min distance between points 100 um 
        [xv, yv] = resolution_grid(2*transducer.pitch*kgrid.dy);
@@ -71,10 +69,10 @@ switch shape
         
     case 'disc'
         ball = zeros(kgrid.Nx, kgrid.Ny);
-        radius = ceil(pulse.wave_length/10/kgrid.dx);
         
         for i = 1 : length(x_mask)
-            ball = ball + makeDisc(kgrid.Nx, kgrid.Ny, x_mask(i), y_mask, radius, 0);
+            radius = ceil(pulse.wave_length/10/kgrid.dx);
+            ball = ball + makeDisc(kgrid.Nx, kgrid.Ny, x_mask(i), y_mask(i), radius, 0);
         end    
         
         maps.sound_speed(ball >= 1) = 2 * c_water;

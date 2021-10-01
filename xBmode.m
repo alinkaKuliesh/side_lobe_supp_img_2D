@@ -1,4 +1,4 @@
-clear all
+function [] = xBmode(theta)
 
 ultrasound_probe = 'L22-14v_lambda/2'; % options: L22-14v RCA_Imasonic P6-3 L22-14v_lambda/4
 
@@ -30,19 +30,18 @@ speed_of_sound = 1480; % [m/s] reference SoS
 rho = 1000; % [kg/m^3] reference density
 
 % pulse settings
-ratio = 2; % f1 / f2
 pulse.center_freq = 15.625e6; % [Hz]
 pulse.freq = 15.625e6; % [Hz]
 pulse.num_cycles = 4; 
 pulse.wave_length = speed_of_sound / pulse.center_freq;
 pulse.length = pulse.num_cycles * pulse.wave_length; % [m]
 pulse.pnp = 400e3; % [Pa]
-pulse.angle = 16; % [deg1]
+pulse.angle = theta; % [deg1]
 
 % transducer settings based on US probe selection
 transducer = define_transducer(ultrasound_probe, grid_size);
 
-image_depth = ceil(6e-3 / grid_size); % [voxels]
+image_depth = ceil(10e-3 / grid_size); % [voxels]
 
 % define the grid: margin = minimal distance between transducer and PML
 [kgrid, margin, PML] = define_grid(grid_size, pulse, transducer, image_depth);
@@ -54,12 +53,12 @@ sensor = define_sensor(margin, kgrid, transducer, 0, 'all');
 %for indent = 0 : (transducer.num_elements - transducer.num_active_elements)
 % indent = 0 corresponds to line/element 33; indent = 32 <-> 65 
 % indent = 128 <-> central line 129
-for indent = 0 : 33
+for indent = 0 : 17
     display(indent)
 % define the medium | in loop so speckle randomly generated every time |
 % patterns: single points OR resolution grid
     speckle_flag = true;
-    medium = define_medium(kgrid, transducer, pulse, 'resolution grid', margin, speckle_flag);
+    medium = define_medium(kgrid, transducer, pulse, 'single points', margin, speckle_flag);
     
 % create the time array long enough for tilted PW propagation
     t_end = (((kgrid.Nx - margin) + ...
@@ -94,3 +93,5 @@ dt = kgrid.dt;
 dx = kgrid.dx;
 
 save('xWave_disc.mat', 'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
+
+end

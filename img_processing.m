@@ -17,7 +17,9 @@ switch resolution
         line_start = 1;
         line_finish = 34;
         file_mb = 'RESULTS/xWave_disc.mat'; % mb = main beam
-        file_cb = 'RESULTS/xWave_inv_disc.mat'; % cb = comp beam
+%         file_cb = 'RESULTS/xWave_inv_disc.mat'; % cb = comp beam
+        file_cb = 'RESULTS/xWave_inv_disc_speckle.mat'; % cb = comp beam
+
         
     case 0.25
 %         load('RESULTS/xWave_lambda_pitch.mat')
@@ -91,7 +93,7 @@ xlabel('x [mm]')
 ylabel('z [mm]')
 colorbar
 colormap gray
-title(['Complementary beam, f = 7.5 MHz, NC = ', num2str(pulse.num_cycles-2)])
+title(['Complementary beam, f = 7.5 MHz, NC = ', num2str(pulse.num_cycles)])
 
 %% overlay points on the image
 load('res_grid.mat')
@@ -144,7 +146,7 @@ figure()
 imagesc(x_vec*1e3, z_vec(pos_z_start:pos_z_end)*1e3, I_diff(pos_z_start:pos_z_end, :)); hold on
 axis image
 if normalization
-    title(['norm(E\_main) - 0.3*norm(E\_comp) (f = 7.5 MHz, NC = ', num2str(pulse.num_cycles-2), ')'])
+    title(['norm(E\_main) - 0.3*norm(E\_comp) (f = 7.5 MHz, NC = ', num2str(pulse.num_cycles), ')'])
 else
     title(['E\_main - E\_comp (f = 7.5 MHz, NC = ', num2str(pulse.num_cycles-2),')'])
 end
