@@ -28,7 +28,8 @@ else
 end
 
 CFL = 0.3;
-grid_size = 1.6e-6; % [m]
+% grid_size = 1.6e-6; % [m]
+grid_size = 20e-6; % [m]
 
 speed_of_sound = 1480; % [m/s] reference SoS
 rho = 1000; % [kg/m^3] reference density
@@ -96,6 +97,13 @@ end
 dt = kgrid.dt;
 dx = kgrid.dx;
 
-save('xWave_disc.mat', 'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
+if save_flag
+    save(strcat('xWave_', num2str(pulse.angle), 'deg', '.mat'),...
+        'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
+else
+    save(strcat('xWave_', num2str(pulse.angle), 'deg', '.mat'),...
+         'pulse', 'dt', 'RF_matrix', '-v7.3');
+end
+
 
 end
