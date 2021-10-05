@@ -15,7 +15,7 @@ if gpu_run
     addpath("/tudelft.net/staff-bulk/tnw/IST/AK/hpc/akuliesh1/Matlab_Toolboxes");
     DATA_CAST = 'gpuArray-single';
     folderName = strcat('theta_', num2str(theta));
-    mkdir folderName
+    mkdir(folderName)
     DATA_PATH = folderName;
 elseif cpu_run_cluster
     addpath("/tudelft.net/staff-bulk/tnw/IST/AK/hpc/akuliesh1/Matlab_Toolboxes");
