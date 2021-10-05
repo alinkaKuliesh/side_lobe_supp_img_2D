@@ -16,7 +16,7 @@ if gpu_run
     DATA_CAST = 'gpuArray-single';
     folderName = strcat('theta_', num2str(theta));
     mkdir(folderName)
-    DATA_PATH = folderName;
+    DATA_PATH = strcat('~/tudbulk/side_lobe_supp_img_2D/', folderName);
 elseif cpu_run_cluster
     addpath("/tudelft.net/staff-bulk/tnw/IST/AK/hpc/akuliesh1/Matlab_Toolboxes");
     DATA_CAST = 'single';
@@ -30,8 +30,8 @@ else
 end
 
 CFL = 0.3;
-grid_size = 1.6e-6; % [m]
-% grid_size = 20e-6; % [m]
+% grid_size = 1.6e-6; % [m]
+grid_size = 20e-6; % [m]
 
 speed_of_sound = 1480; % [m/s] reference SoS
 rho = 1000; % [kg/m^3] reference density
