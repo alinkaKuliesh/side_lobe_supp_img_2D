@@ -14,6 +14,9 @@ maroilles_gpu_run = false;
 if gpu_run
     addpath("/tudelft.net/staff-bulk/tnw/IST/AK/hpc/akuliesh1/Matlab_Toolboxes");
     DATA_CAST = 'gpuArray-single';
+    folderName = strcat('theta_', num2str(theta));
+    mkdir folderName
+    DATA_PATH = folderName;
 elseif cpu_run_cluster
     addpath("/tudelft.net/staff-bulk/tnw/IST/AK/hpc/akuliesh1/Matlab_Toolboxes");
     DATA_CAST = 'single';
@@ -75,7 +78,7 @@ for indent = 0 : 16
     
     if gpu_run
         input_args = {'PMLInside', false, 'PMLAlpha', PML.Alpha, 'PMLSize',[PML.X_SIZE, PML.Y_SIZE],...
-            'DataCast', DATA_CAST, 'Smooth', false};
+            'DataCast', DATA_CAST, 'Smooth', false, 'DataPath', DATA_PATH};
         sensor_data = kspaceFirstOrder2DG(kgrid, medium, source, sensor, input_args{:});
     elseif maroilles_gpu_run
         input_args = {'PMLInside', false, 'PMLAlpha', PML.Alpha, 'PMLSize', [PML.X_SIZE, PML.Y_SIZE],...
