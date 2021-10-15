@@ -45,7 +45,8 @@ end
 tax = 0:dt:Nt - 1 * dt; % time axis[s]
 %% define min and max image depth and set z vector 
 z_min = 0; % [m]
-z_max = ((Da - param.p) / 2 ) * cotd(param.xAngle); % [m]
+% z_max = ((Da - param.p) / 2 ) * cotd(param.xAngle); % [m]
+z_max = 10e-3; % [m]
 
 z_vector = z_min:param.p/4:(z_max - 10 * param.p); % depth axis [m]
 x_vector = 0:param.p:Da; % x axis [m]

@@ -30,10 +30,10 @@ switch scatters
     case 'single points'
         xv = [1:10:100] * pulse.wave_length + margin * kgrid.dx ; % [m]
         if mod (transducer.pitch, 2) == 0
-             yv = (((transducer.num_active_elements - 1) / 2 + 8) * transducer.pitch ...
+             yv = (((transducer.num_active_elements - 1) / 2 + 11) * transducer.pitch ...
                  + transducer.pitch / 2) * kgrid.dy;     % [m]  
         else
-            yv = (((transducer.num_active_elements - 1) / 2 + 8) * transducer.pitch...
+            yv = (((transducer.num_active_elements - 1) / 2 + 11) * transducer.pitch...
                 + (transducer.pitch - 1) / 2) * kgrid.dy;  
         end   
         
@@ -90,10 +90,10 @@ end
 
 
     figure()
-    imagesc(maps.sound_speed)
+    imagesc([0:size(maps.sound_speed, 1)-1]*kgrid.dx*1e3, [0:size(maps.sound_speed, 2)-1]*kgrid.dx*1e3, maps.sound_speed)
     axis image
-    xlabel('longitudinal voxels')
-    ylabel('axial voxels')
+    xlabel('x [mm]')
+    ylabel('z [mm]')
     title('slice of SOS map')
     colorbar
       
