@@ -1,10 +1,10 @@
 clear all
 
 line_start = 1;
-line_finish = 17;
+line_finish = 23;
 
 theta_start = 5;
-theta_end = 21;
+theta_end = 5;
 theta_step = 5;
 
 n = (theta_end - theta_start) / theta_step + 1;
@@ -12,7 +12,7 @@ n = (theta_end - theta_start) / theta_step + 1;
 for i = 1 : 1 : n % 15 - 21 step 0.5
     theta = theta_start + (i - 1) * theta_step;
     display(theta)
-    file = strcat('RESULTS/Baptiste/xWave_', num2str(theta), 'deg.mat');
+    file = strcat('RESULTS/no_speckle/xWave_', num2str(theta), 'deg.mat');
     % reconstruction of the image from single beam
     if i == 1
         [IQbf(i, :, :), z_vec, x_vec] = RF2img(file, 'verasonics', line_start, line_finish);

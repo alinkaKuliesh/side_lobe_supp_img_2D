@@ -1,5 +1,5 @@
 function [SIGbf, zvector, xvector] = RF2img (file_path, sampling_freq, line_start, line_finish)
-load('RESULTS/Baptiste/xWave_5deg.mat')
+load('RESULTS/no_speckle/xWave_5deg.mat')
 
 load(file_path);
 
