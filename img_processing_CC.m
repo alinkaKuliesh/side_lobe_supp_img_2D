@@ -3,9 +3,9 @@ clear all
 line_start = 1;
 line_finish = 23;
 
-theta_start = 5;
-theta_end = 5;
-theta_step = 5;
+theta_start = 21;
+theta_end = 21;
+theta_step = 1;
 
 n = (theta_end - theta_start) / theta_step + 1;
 
