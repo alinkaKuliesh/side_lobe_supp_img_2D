@@ -3,8 +3,8 @@ clear all
 line_start = 1;
 line_finish = 23;
 
-theta_start = 21;
-theta_end = 21;
+theta_start = 18;
+theta_end = 18;
 theta_step = 1;
 
 n = (theta_end - theta_start) / theta_step + 1;
@@ -40,8 +40,8 @@ for i = 1 : size(IQbf, 1)
     Img(i, :, :) = I;
 
     figure()
-    imagesc(x_vec*1e3, z_vec*1e3, I);
-%     imagesc(I);
+%     imagesc(x_vec*1e3, z_vec*1e3, I);
+    imagesc(I);
     axis image
     xlabel('x [mm]')
     ylabel('z [mm]')
@@ -63,6 +63,12 @@ xlabel('x [mm]')
 ylabel('amplitude [dB]')
 legend
 
+
+x1 = interpn(x_vec); y1 = squeeze(Img(i, idx, :))'; 
+x2 =interpn(x_vec); y2 = ones(size(x2))*(-6); 
+P = InterX([x1;y1],[x2;y2]); 
+figure
+plot(x1,y1,x2,y2,P(1,:),P(2,:),'ro')
 
 
 %% overlay points on the image

@@ -6,7 +6,7 @@ save_flag = str2num(save_flag);
 ultrasound_probe = 'L22-14v_lambda/2'; % options: L22-14v RCA_Imasonic P6-3 L22-14v_lambda/4
 
 % simulation settings
-gpu_run = true;
+gpu_run = false;
 cpu_run_cluster = false;
 record_movie = false;
 maroilles_gpu_run = false;
@@ -30,7 +30,7 @@ else
 end
 
 CFL = 0.3;
-grid_size = 1.6e-6; % [m]
+grid_size = 15e-6; % [m]
 
 speed_of_sound = 1480; % [m/s] reference SoS
 rho = 1000; % [kg/m^3] reference density

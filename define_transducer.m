@@ -1,4 +1,4 @@
-function transducer = define_transducer(ultrasound_probe, grid_size)
+function transducer = define_transducer(ultrasound_probe, grid_size, kerf_flag)
 
 switch ultrasound_probe
     case 'P6-3'
@@ -16,19 +16,20 @@ switch ultrasound_probe
         transducer.center_freq = 3e6; % [Hz]
 
     case 'L22-14v'
-        transducer.num_elements = 128;  % number of transducer elements f# = 1.28
+        transducer.num_elements = 65;  % number of transducer elements f# = 1.28
         transducer.num_active_elements = 65; % number of firing transducer elements 
         kerf = 20e-6; % [m]
-        if kerf < grid_size
+         if kerf < grid_size || kerf_flag == 0
             transducer.kerf = 0;
+            transducer.element_width = ceil((80e-6+kerf)/grid_size); % [voxels]
         else
             transducer.kerf = ceil(kerf/grid_size); % [voxels]
-        end
-        transducer.element_width = ceil(80e-6 / grid_size); % [voxels]
+            transducer.element_width = ceil(80e-6 / grid_size); % [voxels]
+         end
         transducer.pitch = transducer.kerf + transducer.element_width; % [voxels]
-        transducer.element_length = ceil(1e-3 / grid_size); % [voxels]
+        transducer.element_length = ceil(1.6e-3 / grid_size); % [voxels]
         transducer.bandwidth = 0.6; % fractional bandwidth 1 = 100 %
-        transducer.center_freq = 15e6; % [Hz]
+        transducer.center_freq = 18e6; % [Hz]
         
     case 'L22-14v_lambda/4'
         transducer.num_elements = 4 * 128;  % number of transducer elements f# = 1.28
