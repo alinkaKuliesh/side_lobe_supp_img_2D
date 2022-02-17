@@ -58,5 +58,5 @@ medium.sound_speed = maps.sound_speed;
 medium.density = maps.density;
 medium.BonA = maps.BonA;
 medium.alpha_coeff = maps.alpha_coeff; 
-medium.alpha_power = alpha_power_water;  % frequency dependance y
+medium.alpha_power = 1.5;  % frequency dependance y
 end
