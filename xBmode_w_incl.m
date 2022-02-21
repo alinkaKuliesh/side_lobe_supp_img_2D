@@ -96,12 +96,8 @@ end
 dt = kgrid.dt;
 dx = kgrid.dx;
 
-if save_flag
-    save(strcat('xWave_', num2str(pulse.angle), 'deg', '.mat'),...
-        'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
-else
-    save(strcat('xWave_', num2str(pulse.angle), 'deg', '.mat'),...
-         'pulse', 'dt', 'RF_matrix', '-v7.3');
-end
+save(strcat('xWave_', num2str(pulse.angle), 'deg', '.mat'),...
+    'transducer', 'pulse', 'dt', 'speed_of_sound', 'dx', 'RF_matrix', '-v7.3');
+
 
 
