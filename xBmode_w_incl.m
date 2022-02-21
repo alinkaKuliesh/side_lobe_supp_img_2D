@@ -57,11 +57,11 @@ sensor = define_sensor(margin, kgrid, transducer, 0, 'all');
 %for indent = 0 : (transducer.num_elements - transducer.num_active_elements)
 % indent = 0 corresponds to line/element 33; indent = 32 <-> 65 
 % indent = 128 <-> central line 129
-for indent = 0 : 10%2*(transducer.num_elements-transducer.num_active_elements)-1
+for indent = 0 : (transducer.num_elements-transducer.num_active_elements)%2*(transducer.num_elements-transducer.num_active_elements)-1
     display(indent)
 % define the medium | in loop so speckle randomly generated every time |
 % patterns: single points OR resolution grid
-    speckle_flag = true;
+    speckle_flag = false;
     medium = define_medium_w_incl(kgrid, transducer, pulse, 'resolution grid', margin, speckle_flag);
     
 % create the time array long enough for tilted PW propagation

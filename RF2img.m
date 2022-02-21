@@ -1,10 +1,10 @@
 function [SIGbf, zvector, xvector] = RF2img (file_path, sampling_freq, line_start, line_finish)
-load('RESULTS/no_speckle/xWave_5deg.mat')
+% load('RESULTS/no_speckle/xWave_5deg.mat')
 
 load(file_path);
 
 for i = 1 : size(RF_matrix, 3)
-   SIG(:, :, i) = RF_matrix(:, i:i+128, i);
+   SIG(:, :, i) = RF_matrix(:, i:i+64, i);
 end
 
        

@@ -49,7 +49,7 @@ z_min = 0; % [m]
 z_max = 10e-3; % [m]
 
 z_vector = z_min:param.p/4:(z_max - 10 * param.p); % depth axis [m]
-x_vector = 0:param.p:Da; % x axis [m]
+x_vector = 0:param.p/2:Da; % x axis [m]
 
 %% Receive aperture using f-number
 nAp_receive = cell(length(z_vector),1);
