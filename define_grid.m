@@ -3,9 +3,9 @@
 % =========================================================================
 function [kgrid, margin, PML] = define_grid(grid_size, pulse, transducer, image_depth)
     % set the size of the perfectly matched layer (PML)
-    PML.X_SIZE = 10;            % [grid points]
-    PML.Y_SIZE = 10;            % [grid points]
-    PML.Alpha = 12;
+    PML.X_SIZE = 20;            % [grid points]
+    PML.Y_SIZE = 20;            % [grid points]
+    PML.Alpha = 2;
 
     % calculate the spacing between the grid points
     dx = grid_size; % [m] 

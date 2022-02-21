@@ -16,8 +16,8 @@ switch ultrasound_probe
         transducer.center_freq = 3e6; % [Hz]
 
     case 'L22-14v'
-        transducer.num_elements = 65;  % number of transducer elements f# = 1.28
-        transducer.num_active_elements = 65; % number of firing transducer elements 
+        transducer.num_elements = 128;  % number of transducer elements f# = 1.28
+        transducer.num_active_elements = 64; % number of firing transducer elements 
         kerf = 20e-6; % [m]
          if kerf < grid_size || kerf_flag == 0
             transducer.kerf = 0;

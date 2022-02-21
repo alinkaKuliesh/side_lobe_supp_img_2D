@@ -1,5 +1,5 @@
 function [xv, yv] = resolution_grid(delta)
-fhandle = @(x) 0.5 * x.^1.2;
+fhandle = @(x) 0.5 * x.^1.05;
 
 yv = [0 1 3 6 10 15];
 xv1 = fliplr(fhandle(yv));

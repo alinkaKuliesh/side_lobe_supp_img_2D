@@ -2,19 +2,14 @@
 % DEFINE THE SOURCE
 % =========================================================================
 
-function source = define_source_both(margin, kgrid, transducer, pulse, speed_of_sound, indent)
+function source = define_source_beam(margin, kgrid, transducer, pulse, speed_of_sound)
     apodization_Y = true;
 
-    if mod(indent, 2) == 1
-        transducer.num_active_elements = transducer.num_active_elements + 1;
-        transducer.size_y_active = transducer.size_y_active + transducer.pitch;
-    end
 % DEFINE THE MASK    
     x_offset = margin;
    
     source.u_mask = zeros(kgrid.Nx, kgrid.Ny);
-    start_index_y = kgrid.Ny/2 - round(transducer.size_y/2) + 1 +...
-        floor(indent/2) * transducer.pitch;   
+    start_index_y = kgrid.Ny/2 - round(transducer.size_y_active/2) + 1;
     
     if transducer.kerf ~= 0
         pattern = [ones(transducer.element_width, 1); zeros(transducer.kerf, 1)]';
@@ -29,7 +24,7 @@ function source = define_source_both(margin, kgrid, transducer, pulse, speed_of_
     tone_burst_freq = pulse.freq;  % [Hz]
     tone_burst_cycles = pulse.num_cycles;
     element_spacing = transducer.pitch * kgrid.dx;   % [m]
-    element_index = 0:(floor(transducer.num_active_elements/2)  - 1);    
+    element_index = 0:((transducer.num_active_elements - 1) / 2  - 1);    
     element_index = [element_index fliplr(element_index)];
     
     delays = element_spacing * element_index * sind(pulse.angle) / speed_of_sound;
@@ -66,7 +61,8 @@ function source = define_source_both(margin, kgrid, transducer, pulse, speed_of_
 %     ylabel('Transducer Element');
 %     title('Transmit Pressure');
     
-    winY = getWin(floor(transducer.num_active_elements/2), 'Tukey', 'Param', 0.5, 'Plot', false).'; % 0 Rectangular window; 1 Hann window
+
+    winY = getWin((transducer.num_active_elements-1)/2, 'Tukey', 'Param', 0.5, 'Plot', false).'; % 0 Rectangular window; 1 Hann window
 %     winY = getWin(transducer.num_active_elements/2, 'Hanning', 'Plot', true).'; % 0 Rectangular window; 1 Hann window
 %     winY = kaiser(transducer.num_active_elements/2, 2).';
 %     winY = chebwin(transducer.num_active_elements/2, 20).';
@@ -78,11 +74,9 @@ function source = define_source_both(margin, kgrid, transducer, pulse, speed_of_
     
 
     % add silent element in the middle
-    if mod(indent, 2) == 1
     temporaryp = [temporaryp(1:(transducer.num_active_elements-1)/2, :);...
         zeros(1, size(temporaryp, 2));...
         temporaryp((transducer.num_active_elements-1)/2+1:end, :)];
-    end
     
     figure();
     stackedPlot([1:length(temporaryp(1,:))]*kgrid.dt, temporaryp);

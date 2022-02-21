@@ -26,24 +26,24 @@ end
 
 maps.BonA = BonA0 * ones(kgrid.Nx, kgrid.Ny);
 maps.alpha_coeff = alpha_coeff_0 * ones(kgrid.Nx, kgrid.Ny);
-%% fat inclusion
-c_fat = 1450; %[m/s]
-rho_fat = 950; %[kg/m^3]
-BonA_fat = 10;
-alpha_coeff_fat = 0.6; % power law absorption prefactor [dB/(MHz^y cm)]
+%% blood inclusion
+c_blood = 1584; %[m/s]
+rho_blood = 1060; %[kg/m^3]
+BonA_blood = 6;
+alpha_coeff_blood = 0.14; % power law absorption prefactor [dB/(MHz^y cm)]
 
 x_mask = margin + 250;
 y_mask = kgrid.Ny / 2 - 130; 
 
 ball = zeros(kgrid.Nx, kgrid.Ny);
-radius = ceil(1e-3/kgrid.dx);
+radius = ceil(0.5e-3/kgrid.dx);
         
 ball = ball + makeDisc(kgrid.Nx, kgrid.Ny, x_mask, y_mask, radius, 1);
 
-maps.sound_speed(ball >= 1) = c_fat;
-maps.density(ball >= 1) = rho_fat;
-maps.BonA(ball >= 1) = BonA_fat;
-maps.alpha_coeff(ball >= 1) = alpha_coeff_fat;
+maps.sound_speed(ball >= 1) = c_blood;
+maps.density(ball >= 1) = rho_blood;
+maps.BonA(ball >= 1) = BonA_blood;
+maps.alpha_coeff(ball >= 1) = alpha_coeff_blood;
 
 figure()
 imagesc([0:size(maps.sound_speed, 2)-1]*kgrid.dx*1e3, [0:size(maps.sound_speed, 1)-1]*kgrid.dx*1e3, maps.sound_speed)
@@ -57,6 +57,6 @@ colorbar
 medium.sound_speed = maps.sound_speed;
 medium.density = maps.density;
 medium.BonA = maps.BonA;
-medium.alpha_coeff = maps.alpha_coeff; 
-medium.alpha_power = 1.5;  % frequency dependance y
+% medium.alpha_coeff = maps.alpha_coeff; 
+% medium.alpha_power = 1.5;  % frequency dependance y
 end
