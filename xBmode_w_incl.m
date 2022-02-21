@@ -21,7 +21,7 @@ elseif maroilles_gpu_run
     addpath(genpath("~/k-wave-toolbox-version-1.3"));
     DATA_CAST = 'gpuArray-single';
     DATA_PATH = '~';
-    DEVICE_NUM = 1; % select gpu device [0 1 2] 
+    DEVICE_NUM = 2; % select gpu device [0 1 2] 
 else
     DATA_CAST = 'single';
 end
